@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="Debt Book — registo simples de dívidas e pagamentos.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <title>Debt Book</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">DB</div>
+    <div class="brand-copy"><h1>Debt Book</h1><p>O controlo das tuas dívidas</p></div>
+    <button id="installBtn" class="icon-btn hidden" aria-label="Instalar aplicação">↓</button>
+  </header>
+
+  <main class="container">
+    <section class="welcome">
+      <div><p class="eyebrow">PAINEL GERAL</p><h2>As tuas contas,<br><span>sob controlo.</span></h2></div>
+      <div class="welcome-icon">↗</div>
+    </section>
+
+    <section class="stats" aria-label="Resumo financeiro">
+      <article class="stat-card primary"><span>Total por receber</span><strong id="totalOutstanding">0 MT</strong><small>Saldo em aberto</small></article>
+      <article class="stat-card"><span>Total recebido</span><strong id="totalPaid">0 MT</strong><small>Pagamentos registados</small></article>
+      <article class="stat-card"><span>Registos ativos</span><strong id="activeCount">0</strong><small>Dívidas por liquidar</small></article>
+    </section>
+
+    <section class="toolbar">
+      <div><h3>Registo de dívidas</h3><p class="muted">Acompanha cada valor e pagamento.</p></div>
+      <button id="addBtn" class="btn btn-primary">＋ Nova dívida</button>
+    </section>
+
+    <section class="filters">
+      <label class="searchbox"><span>⌕</span><input id="searchInput" type="search" placeholder="Pesquisar pessoa ou nota…" aria-label="Pesquisar"></label>
+      <select id="statusFilter" aria-label="Filtrar por estado">
+        <option value="all">Todos os estados</option><option value="open">Em aberto</option><option value="paid">Liquidadas</option>
+      </select>
+    </section>
+
+    <section id="debtList" class="debt-list"></section>
+    <section id="emptyState" class="empty-state">
+      <div class="empty-icon">＋</div><h3>Ainda não há dívidas</h3>
+      <p>Adiciona o teu primeiro registo para começares a acompanhar os valores.</p>
+      <button id="emptyAddBtn" class="btn btn-primary">Criar primeiro registo</button>
+    </section>
+
+    <section class="data-tools">
+      <div><h3>Os teus dados</h3><p class="muted">Guarda uma cópia de segurança regularmente.</p></div>
+      <div class="tool-buttons">
+        <button id="exportBtn" class="btn btn-secondary">Exportar JSON</button>
+        <label class="btn btn-secondary file-label">Importar JSON<input id="importInput" type="file" accept=".json,application/json" hidden></label>
+      </div>
+    </section>
+    <p class="privacy-note">Os registos ficam guardados neste navegador/dispositivo. Exporta uma cópia para não dependeres apenas do telemóvel.</p>
+  </main>
+
+  <nav class="bottom-nav"><span class="nav-active">▦ <small>Painel</small></span><span>◷ <small>Histórico</small></span><span>⚙ <small>Dados</small></span></nav>
+
+  <dialog id="debtDialog">
+    <form id="debtForm" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">NOVO REGISTO</p><h2 id="formTitle">Adicionar dívida</h2></div><button type="button" id="closeDialog" class="close-btn" aria-label="Fechar">×</button></div>
+      <input type="hidden" id="debtId">
+      <label>Nome da pessoa<input id="personInput" required maxlength="80" placeholder="Ex.: João M."></label>
+      <div class="form-row">
+        <label>Valor total (MT)<input id="amountInput" required type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00"></label>
+        <label>Data<input id="dateInput" type="date" required></label>
+      </div>
+      <label>Contacto (opcional)<input id="contactInput" maxlength="50" placeholder="Telefone ou outro contacto"></label>
+      <label>Nota (opcional)<textarea id="noteInput" rows="2" maxlength="300" placeholder="Detalhes do acordo…"></textarea></label>
+      <div class="modal-actions"><button type="button" id="cancelBtn" class="btn btn-secondary">Cancelar</button><button type="submit" class="btn btn-primary">Guardar dívida</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="paymentDialog">
+    <form id="paymentForm" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">PAGAMENTO</p><h2>Registar pagamento</h2></div><button type="button" id="closePayment" class="close-btn" aria-label="Fechar">×</button></div>
+      <input type="hidden" id="paymentDebtId">
+      <p id="paymentInfo" class="muted"></p>
+      <label>Valor pago (MT)<input id="paymentAmount" required type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00"></label>
+      <label>Data do pagamento<input id="paymentDate" type="date" required></label>
+      <div class="modal-actions"><button type="button" id="cancelPayment" class="btn btn-secondary">Cancelar</button><button type="submit" class="btn btn-primary">Guardar pagamento</button></div>
+    </form>
+  </dialog>
+  <div id="toast" role="status" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

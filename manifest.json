@@ -1,0 +1,13 @@
+{
+  "name": "Debt Book",
+  "short_name": "Debt Book",
+  "description": "Registo de dívidas e pagamentos",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101010",
+  "theme_color": "#ff7a1a",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
